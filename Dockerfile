@@ -1,5 +1,7 @@
 FROM wehkamp/alpine:3.2
 
+LABEL container.name="wehkamp/docker-gc:1.8.1"
+
 ENV DOCKER_VERSION 1.8.1
 
 RUN apk --update add bash python \
