@@ -42,6 +42,7 @@
 set -o nounset
 set -o errexit
 
+REMOVE_DEAD_CONTAINERS=${REMOVE_DEAD_CONTAINERS:=1}
 GRACE_PERIOD_SECONDS=${GRACE_PERIOD_SECONDS:=3600}
 STATE_DIR=${STATE_DIR:=/var/lib/docker-gc}
 FORCE_IMAGE_REMOVAL=${FORCE_IMAGE_REMOVAL:=0}
@@ -206,6 +207,14 @@ compute_exclude_container_ids
 comm -23 containers.all containers.running > containers.exited
 container_log "Container not running" containers.exited
 
+# Remove containers that are in a `dead` state since docker cannot inspect
+# those, causing the script to break when it tries.
+echo -n "" > containers.dead
+for line in $($DOCKER ps -a --no-trunc -f status=dead --format 'id={{.ID}};image={{.Image}};name={{.Names}}'); do
+    eval $line
+    sed -i -e "/${id}/d" containers.exited && log "Container in state dead ${id} ${image} ${name}" && echo $id >> containers.dead
+done
+
 # Find exited containers that finished at least GRACE_PERIOD_SECONDS ago
 echo -n "" > containers.reap.tmp
 cat containers.exited | while read line
@@ -216,6 +225,9 @@ do
         echo $line >> containers.reap.tmp
     fi
 done
+
+# Only remove dead containers if that is desired
+[[ ${REMOVE_DEAD_CONTAINERS} ]] && cat containers.dead >> containers.reap.tmp
 
 # List containers that we will remove and exclude ids.
 cat containers.reap.tmp | sort | uniq | grep -v -f $EXCLUDE_CONTAINER_IDS_FILE > containers.reap || true
