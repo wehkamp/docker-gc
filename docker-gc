@@ -271,3 +271,4 @@ fi
 # Reap images.
 image_log "Removing image" images.reap
 xargs -n 1 $DOCKER rmi $FORCE_FLAG < images.reap &>/dev/null || true
+log "Done, all garbage has been removed"
