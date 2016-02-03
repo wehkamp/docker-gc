@@ -195,7 +195,6 @@ $DOCKER ps -a -q --no-trunc | sort | uniq > containers.all
 
 # List running containers
 $DOCKER ps -q --no-trunc | sort | uniq > containers.running
-container_log "Container running" containers.running
 
 # compute ids of container images to exclude from GC
 compute_exclude_ids
