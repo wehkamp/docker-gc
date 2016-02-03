@@ -133,7 +133,7 @@ The docker-gc container requires access to the docker socket in order to
 function, so you need to map it when running, e.g.:
 
 ```sh
-$ docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc spotify/docker-gc
+$ docker run -d --name docker-gc -v $(which docker):/bin/docker:ro -v /var/run/docker.sock:/var/run/docker.sock --log-driver=fluentd --log-opt 'fluentd-tag=docker.docker-gc' wehkamp/docker-gc:1.0
 ```
 
 The `/etc` directory is also mapped so that it can read any exclude files
