@@ -7,10 +7,10 @@ COPY ./docker-gc /docker-gc
 VOLUME /var/lib/docker-gc
 CMD ["/docker-gc"]
 
-ENV DOCKER_VERSION 1.9.1
+ENV DOCKER_VERSION 1.11.2
 RUN apk --update add bash python \
   && wget -q -O /bin/docker https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION} \
   && chmod +x /bin/docker \
   && rm -rf /var/cache/apk/*
 
-LABEL container.name="wehkamp/docker-gc:1.9.1"
+LABEL container.name="wehkamp/docker-gc:1.11.2"
