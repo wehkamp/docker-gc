@@ -9,8 +9,9 @@ CMD ["/docker-gc"]
 
 ENV DOCKER_VERSION 1.11.2
 RUN apk --update add bash python \
-  && wget -q -O /bin/docker https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION} \
+  && wget -q -O - https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz | tar -xzC /tmp/ \
+  && mv /tmp/docker/docker /bin/ \
   && chmod +x /bin/docker \
-  && rm -rf /var/cache/apk/*
+  && rm -rf /var/cache/apk/* /tmp/*
 
 LABEL container.name="wehkamp/docker-gc:1.11.2"
