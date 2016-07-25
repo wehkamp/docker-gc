@@ -8,7 +8,8 @@ VOLUME /var/lib/docker-gc
 CMD ["/docker-gc"]
 
 ENV DOCKER_VERSION 1.11.2
-RUN apk --update add bash python \
+RUN LAYER=build \
+  && apk --update add bash \
   && wget -q -O - https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz | tar -xzC /tmp/ \
   && mv /tmp/docker/docker /bin/ \
   && chmod +x /bin/docker \
