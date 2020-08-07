@@ -1,4 +1,4 @@
-FROM wehkamp/alpine:3.2
+FROM 234348545939.dkr.ecr.eu-west-1.amazonaws.com//wehkamp/alpine:3.2
 
 # Force removal of images with multiple tags.
 ENV FORCE_IMAGE_REMOVAL 1
